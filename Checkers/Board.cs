@@ -225,6 +225,20 @@ namespace Checkers
             }
         }
 
+        internal void Flip()
+        {
+            for (int i = 1; i < size / 2; ++i)
+            {
+                for (int j = 0; j < size / 2; ++j)
+                {
+                    Figure? figure = figures[new Cell(i, 2 * j + i % 2)];
+                    figures[new Cell(i, 2 * j + i % 2)] = figures[new Cell(size - i, size - 2 * j - i % 2)];
+                    figures[new Cell(size - i, size - 2 * j - i % 2)] = figure;
+
+                }
+            }
+        }
+
         private protected Cell? NearestFigureOnDiagonal(Cell start,
             int deltaX, int deltaY)
         {
