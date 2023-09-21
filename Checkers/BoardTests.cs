@@ -135,6 +135,30 @@ namespace BoardTests
         }
     }
 
+    public class FiguresOfColor
+    {
+        [Test]
+        public void FiguresOfColor1()
+        {
+            Board board = new(8);
+            Cell cell1 = new(3, 5);
+            Cell cell2 = new(3, 7);
+            Cell cell3 = new(2, 4);
+            Cell cell4 = new(6, 4);
+            Cell cell5 = new(7, 1);
+            Figure whiteChecker = new(Color.White, Type.Checker);
+            Figure blackChecker = new(Color.Black, Type.Checker);
+            Figure whiteQueen = new(Color.White, Type.Queen);
+            Figure blackQueen = new(Color.Black, Type.Queen);
+            board.FillCell(cell1, whiteQueen);
+            board.FillCell(cell2, blackQueen);
+            board.FillCell(cell3, blackChecker);
+            board.FillCell(cell4, whiteChecker);
+            board.FillCell(cell5, blackQueen);
+            Assert.That(board.FiguresOfColor(Color.Black).Count, Is.EqualTo(3));
+        }
+    }
+
     public class ClearCell
     {
         [Test]
@@ -268,6 +292,35 @@ namespace BoardTests
         }
     }
 
+    public class DiagonalsUntilFigure
+    {
+        [Test]
+        public void DiagonalsUntilFigure1()
+        {
+            Board board = new(8);
+            Figure blackQueen = new(Color.Black, Type.Queen);
+            Figure whiteChecker = new(Color.White, Type.Checker);
+            Cell cell = new(3, 5);
+            Cell obstacle1 = new(4, 6);
+            Cell obstacle2 = new(1, 7);
+            board.FillCell(cell, blackQueen);
+            board.FillCell(obstacle1, whiteChecker);
+            board.FillCell(obstacle2, whiteChecker);
+            Cells expected = new()
+            {
+                new(2, 6),
+                new(2, 4),
+                new(1, 3),
+                new(4, 4),
+                new(5, 3),
+                new(6, 2),
+                new(7, 1)
+            };
+            Cells got = board.DiagonalsUntilFigure(cell);
+            Assert.That(got.All(expected.Contains) && expected.All(got.Contains), Is.True);
+        }
+    }
+
     public class OnLine
     {
         [Test]
@@ -319,8 +372,7 @@ namespace BoardTests
             board.FillCell(onDiag1, figure);
             Cells expected = new() { onDiag1};
             Cells got =  board.NearestFIgureOnDiagonals(start);
-            Assert.That(got.All(expected.Contains) && expected.All(got.Contains),
-                        Is.True);
+            Assert.That(got.All(expected.Contains) && expected.All(got.Contains), Is.True);
         }
 
         [Test]
@@ -337,8 +389,7 @@ namespace BoardTests
             board.FillCell(onDiag3, figure);
             Cells expected = new() { onDiag1, onDiag2 };
             Cells got = board.NearestFIgureOnDiagonals(start);
-            Assert.That(got.All(expected.Contains) && expected.All(got.Contains),
-                        Is.True);
+            Assert.That(got.All(expected.Contains) && expected.All(got.Contains), Is.True);
         }
 
         [Test]
@@ -397,6 +448,46 @@ namespace BoardTests
             Cell attacker = new(1, 3);
             Cell defender = new(3, 7);
             Assert.That(board.AttackLandingCell(attacker, defender), Is.Null);
+        }
+    }
+
+    public class DefenderCell
+    {
+        [Test]
+        public void DefenderCell1() 
+        {
+            Board board = new(8);
+            Cell attacker = new(1, 3);
+            Cell landing = new(5, 7);
+            Cell defender = new(4, 6);
+            Assert.That(board.DefenderCell(attacker, landing), Is.EqualTo(defender));
+        }
+
+        [Test]
+        public void DefenderCell2()
+        {
+            Board board = new(8);
+            Cell attacker = new(-1, 3);
+            Cell landing = new(6, 8);
+            Assert.That(board.DefenderCell(attacker, landing), Is.Null);
+        }
+
+        [Test]
+        public void DefenderCell3()
+        {
+            Board board = new(8);
+            Cell attacker = new(1, 3);
+            Cell landing = new(7, 9);
+            Assert.That(board.DefenderCell(attacker, landing), Is.Null);
+        }
+
+        [Test]
+        public void DefenderCell4()
+        {
+            Board board = new(8);
+            Cell attacker = new(1, 3);
+            Cell landing = new(3, 7);
+            Assert.That(board.DefenderCell(attacker, landing), Is.Null);
         }
     }
 }

@@ -24,6 +24,11 @@ internal struct Cell
     }
     public int X { set; get; }
     public int Y { set; get; }
+
+    public string? toString()
+    {
+        return "(" + X.ToString() + ", " + Y.ToString() + ")";
+    }
 }
 
 namespace Checkers
@@ -32,7 +37,7 @@ namespace Checkers
 
     public class Board
     {
-        protected int size;
+        internal int size;
 
         internal Dictionary<Cell, Figure?> figures = new();
 
@@ -94,6 +99,22 @@ namespace Checkers
             return false;
         }
 
+        internal Cells FiguresOfColor(Color color)
+        {
+            Cells result = new();
+
+            foreach (var cell in figures)
+            {
+                if (cell.Value == null)
+                    continue;
+
+                if (cell.Value.Color == color)
+                    result.Add(cell.Key);
+            }
+
+            return result;
+        }
+
         internal Cells Adjacents(Cell cell)
         {
             if (!IsCell(cell))
@@ -136,6 +157,19 @@ namespace Checkers
                     result.Add(possibleAdjacent);
                 }
             }
+
+            return result;
+        }
+
+        internal Cells DiagonalsUntilFigure(Cell cell)
+        {
+            Cells result = new();
+
+            result.AddRange(DiagonalUntilFigure(cell, 1, 1));
+            result.AddRange(DiagonalUntilFigure(cell, 1, -1));
+            result.AddRange(DiagonalUntilFigure(cell, -1, 1));
+            result.AddRange(DiagonalUntilFigure(cell, -1, -1));
+
 
             return result;
         }
@@ -197,6 +231,30 @@ namespace Checkers
 
             return null;
         }
+
+        internal Cell? DefenderCell(Cell attacker, Cell landing) 
+        {
+            if (!IsCell(attacker) || !IsCell(landing))
+                return null;
+
+            if (!OnLine(attacker, landing))
+                return null;
+
+            Cell result = landing;
+
+            if (attacker.X < landing.X)
+                result.X--;
+            else result.X++;
+
+            if (attacker.Y < landing.Y)
+                result.Y--;
+            else result.Y++;
+
+            if (IsCell(result))
+                return result;
+
+            return null;
+        }
         internal void ClearCell(Cell cell)
         {
             FillCell(cell, null);
@@ -216,25 +274,25 @@ namespace Checkers
 
         internal void FillWithSame(Figure? figure)
         {
-            for (int i = 1; i < size; ++i)
+            for (int i = 1; i <= size; ++i)
             {
                 for (int j = 0; j < size / 2; ++j)
                 {
-                    figures[new Cell(i, 2 * j + i % 2)] = figure;
+                    Cell cell = new(i, 2 * j + (i + 1) % 2 + 1);
+                    figures[cell] = figure;
                 }
             }
         }
 
         internal void Flip()
         {
-            for (int i = 1; i < size / 2; ++i)
+            for (int i = 1; i <= size / 2; ++i)
             {
                 for (int j = 0; j < size / 2; ++j)
                 {
-                    Figure? figure = figures[new Cell(i, 2 * j + i % 2)];
-                    figures[new Cell(i, 2 * j + i % 2)] = figures[new Cell(size - i, size - 2 * j - i % 2)];
-                    figures[new Cell(size - i, size - 2 * j - i % 2)] = figure;
-
+                    Cell cell1 = new(i, 2 * j + (i + 1) % 2 + 1);
+                    Cell cell2 = new(size + 1 - cell1.X, size + 1 - cell1.Y);
+                    (figures[cell2], figures[cell1]) = (figures[cell1], figures[cell2]);
                 }
             }
         }
@@ -244,12 +302,10 @@ namespace Checkers
         {
             if (!IsCell(start))
                 return null;
-            Console.WriteLine($"start cell: {0:D}, {1:D}\n", start.X, start.Y);
             start.X += deltaX;
             start.Y += deltaY;
             while (IsCell(start))
             {
-                Console.WriteLine($"current cell: {0:D}, {1:D}\n", start.X, start.Y);
                 if (!IsFree(start))
                     return start;
                 start.X += deltaX;
@@ -257,6 +313,27 @@ namespace Checkers
 
             };
             return null;
+        }
+
+        private protected Cells DiagonalUntilFigure(Cell cell, int deltaX, int deltaY)
+        {
+            Cells result = new();
+            
+            cell.X += deltaX;
+            cell.Y += deltaY;
+
+            while (IsCell(cell))
+            {
+                if (!IsFree(cell))
+                    break;
+
+                result.Add(cell);
+
+                cell.X += deltaX;
+                cell.Y += deltaY;
+            }
+
+            return result;
         }
     }
 }
