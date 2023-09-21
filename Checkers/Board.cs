@@ -37,31 +37,19 @@ namespace Checkers
 
     public class Board
     {
-        internal int size;
+        internal static int size = 8;
 
         internal Dictionary<Cell, Figure?> figures = new();
 
-        public Board(int size)
+        public Board()
         {
-            if (size % 2 != 0)
-            {
-                throw new ArgumentException("Size of board must be even");
-            }
-
-            if (size <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(size));
-            }
-
-            this.size = size;
-
             FillWithNulls();
         }
 
-        internal bool IsCell(Cell cell)
+        internal static bool IsCell(Cell cell)
         {
             if (cell.X <= 0 || cell.Y <= 0) return false;
-            if (cell.X > this.size || cell.Y > this.size) return false;
+            if (cell.X > Board.size || cell.Y > Board.size) return false;
             return (cell.X + cell.Y) % 2 == 0;
         }
 
@@ -280,6 +268,21 @@ namespace Checkers
                 {
                     Cell cell = new(i, 2 * j + (i + 1) % 2 + 1);
                     figures[cell] = figure;
+                }
+            }
+        }
+
+        internal void FillDefault()
+        {
+            for (int i = 1; i <= size; ++i)
+            {
+                for (int j = 0; j < size / 2; ++j)
+                {
+                    Cell cell = new(i, 2 * j + (i + 1) % 2 + 1);
+                    if (cell.Y <= 3)
+                        figures[cell] = new Figure(Color.White, Type.Checker);
+                    if (cell.Y >= 6)
+                        figures[cell] = new Figure(Color.Black, Type.Checker);
                 }
             }
         }

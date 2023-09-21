@@ -10,7 +10,7 @@
 
         public Game()
         {
-            board = new(8);
+            board = new();
             turn = Color.White;
             movedCell = null;
         }
@@ -126,6 +126,11 @@
             board.Flip();
         }
 
+        internal void Start()
+        {
+            board.FillDefault();
+        }
+
         internal bool IsVictory()
         {
             return board.FiguresOfColor(EnemyColor()).Count == 0;
@@ -160,7 +165,7 @@
             if (figure.Type != Type.Checker) 
                 return false;
 
-            if (cell.Y == board.size)
+            if (cell.Y == Board.size)
             {
                 board.FillCell(cell, new Figure(figure.Color, Type.Queen));
                 return true;
