@@ -1,5 +1,10 @@
 ﻿namespace Checkers
 {
+    enum BoardStyle
+    {
+        Default,
+        Fancy
+    }
     internal static class Graphics
     {
         internal static Cell? StringToCell(string str, bool flipped)
@@ -46,6 +51,25 @@
             return result;
         }
 
+        internal static string? CellsToString(Cells cells, bool flipped)
+        {
+            string? result = "";
+
+            if (cells.Count == 0) 
+                return "";
+
+            foreach (var cell in cells)
+            {
+                result += CellToString(cell, flipped);
+                result += " ";
+
+            }
+
+            result = result[..^1];
+
+            return result;
+        }
+
         internal static string FigureToString(Figure? figure)
         {
             if (figure == null)
@@ -59,7 +83,8 @@
             return "W";
         }
 
-        internal static string BoardToString(Board board)
+        internal static string BoardToString(Board board, Cells choosable, Cell? chosen,
+            BoardStyle style = BoardStyle.Default)
         {
             string result = "";
 
@@ -75,7 +100,24 @@
                 for (int j = 1;  j <= Board.Size; j++)
                 {
                     Cell cell = new(j, i);
-                    result += FigureToString(board.Occupant(cell));
+                    string figure = FigureToString(board.Occupant(cell));
+                    if (style == BoardStyle.Default)
+                        result += figure;
+                    if (style == BoardStyle.Fancy)
+                    {
+                        if (cell.Equals(chosen))
+                        {
+                            result += "{" + figure + "}";
+                            continue;
+                        }
+                        if (choosable.Contains(cell))
+                        {
+                            result += "[" + figure + "]";
+                            continue;
+                        }
+                        result += "┊" + figure + "┊";
+                    }
+                        
                 }
 
                 result += "\n";
@@ -85,10 +127,14 @@
 
             for (int i = 1; i <= Board.Size; i++)
             {
+                if (style == BoardStyle.Fancy)
+                    result += " ";
                 if (flipped)
                     result += (char)(Board.Size - i + 'A');
                 else
                     result += (char)(i + 'A' - 1);
+                if (style == BoardStyle.Fancy)
+                    result += " ";
             }
 
             return result;

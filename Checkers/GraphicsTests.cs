@@ -109,7 +109,7 @@ namespace GraphicsTests
                     "2........\n" +
                     "1........\n" +
                     " ABCDEFGH";
-                Assert.That(Graphics.BoardToString(board), Is.EqualTo(expected));
+                Assert.That(Graphics.BoardToString(board, new(), null), Is.EqualTo(expected));
             }
 
             [Test]
@@ -136,7 +136,7 @@ namespace GraphicsTests
                     "1W.......\n" +
                     " ABCDEFGH";
 
-                Assert.That(Graphics.BoardToString(board), Is.EqualTo(expected));
+                Assert.That(Graphics.BoardToString(board, new(), null), Is.EqualTo(expected));
             }
 
             [Test]
@@ -155,7 +155,7 @@ namespace GraphicsTests
                     "1w.w.w.w.\n" +
                     " ABCDEFGH";
 
-                Assert.That(Graphics.BoardToString(board), Is.EqualTo(expected));
+                Assert.That(Graphics.BoardToString(board, new(), null), Is.EqualTo(expected));
             }
 
             [Test] 
@@ -175,7 +175,7 @@ namespace GraphicsTests
                     "8b.b.b.b.\n" +
                     " HGFEDCBA";
 
-                Assert.That(Graphics.BoardToString(board), Is.EqualTo(expected));
+                Assert.That(Graphics.BoardToString(board, new(), null), Is.EqualTo(expected));
             }
         }
 }

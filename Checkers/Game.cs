@@ -105,6 +105,18 @@
 
             return false;
         }
+        internal Cells PossibleTurnStarts() 
+        {
+            Cells result = new();
+
+            foreach(Cell cell in board.FiguresOfColor(turn))
+            {
+                if (PossibleTurns(cell).Count > 0)
+                    result.Add(cell);
+            }
+
+            return result;
+        }
 
         internal void MakeTurn(Cell begin, Cell end)
         {
@@ -115,8 +127,7 @@
                 board.ClearCell(begin);
                 movedCell = end;
                 TryPutQueen(end);
-                if (PossibleTurns(end).Count == 0)
-                    EndTurn();
+                EndTurn();
                 return;
             }
 
@@ -153,6 +164,15 @@
         internal bool IsVictory()
         {
             return board.FiguresOfColor(EnemyColor()).Count == 0;
+        }
+
+        internal Color? Winner()
+        {
+            if (board.FiguresOfColor(Color.White).Count == 0)
+                return Color.Black;
+            if (board.FiguresOfColor(Color.Black).Count == 0)
+                return Color.White;
+            return null;
         }
 
         private protected Cells IsCorrectTurn(Cell attacker, Cell defender, Figure figure) 
