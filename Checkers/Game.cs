@@ -31,6 +31,9 @@
                 if (!movedCell.Value.Equals(cell))
                     return result;
 
+            if (HasAttackTurns())
+                return result;
+
             if (figure.Type == Type.Checker)
             {
                 foreach (Cell turn in board.FrontAdjacents(cell)) 
@@ -87,7 +90,20 @@
             if (result.Count > 0)
                 return result;
 
+            if (movedCell != null)
+                return result;
+
             return PossibleMoveTurns(cell);
+        }
+
+        internal bool HasAttackTurns()
+        {
+            foreach(Cell cell in board.FiguresOfColor(turn)) 
+            {
+                if (PossibleAttackTurns(cell).Count > 0) return true;
+            }
+
+            return false;
         }
 
         internal void MakeTurn(Cell begin, Cell end)
@@ -98,7 +114,8 @@
                 board.FillCell(end, figure);
                 board.ClearCell(begin);
                 movedCell = end;
-                if (TryPutQueen(end))
+                TryPutQueen(end);
+                if (PossibleTurns(end).Count == 0)
                     EndTurn();
                 return;
             }
@@ -112,6 +129,8 @@
                 board.ClearCell(defender);
                 board.ClearCell(begin);
                 if (TryPutQueen(end))
+                    EndTurn();
+                if(PossibleTurns(end).Count == 0)
                     EndTurn();
                 return;
             }
@@ -165,7 +184,7 @@
             if (figure.Type != Type.Checker) 
                 return false;
 
-            if (cell.Y == Board.size)
+            if (cell.Y == Board.Size)
             {
                 board.FillCell(cell, new Figure(figure.Color, Type.Queen));
                 return true;

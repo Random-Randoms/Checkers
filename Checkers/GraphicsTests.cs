@@ -2,26 +2,30 @@
 
 namespace GraphicsTests
 {
-    internal class GraphicsTests
-    {
         public class CellToString
         {
             [Test] 
             public void CellToString1()
             {
-                Assert.That(Graphics.CellToString(new Cell(1, 3)), Is.EqualTo("A3"));
+                Assert.That(Graphics.CellToString(new Cell(1, 3), false), Is.EqualTo("A3"));
             }
 
             [Test]
             public void CellToString2()
             {
-                Assert.That(Graphics.CellToString(new Cell(5, 7)), Is.EqualTo("E7"));
+                Assert.That(Graphics.CellToString(new Cell(5, 7), false), Is.EqualTo("E7"));
             }
 
             [Test]
             public void CellToString3()
             {
-                Assert.That(Graphics.CellToString(new Cell(-1, 7)), Is.EqualTo(null));
+                Assert.That(Graphics.CellToString(new Cell(-1, 7), false), Is.EqualTo(null));
+            }
+
+            [Test]
+            public void CellToString4()
+            {
+                Assert.That(Graphics.CellToString(new Cell(6, 8), false), Is.EqualTo("F8"));
             }
         }
 
@@ -30,19 +34,25 @@ namespace GraphicsTests
             [Test]
             public void StringToCell1()
             {
-                Assert.That(Graphics.StringToCell("D6"), Is.EqualTo(new Cell(4, 6)));
+                Assert.That(Graphics.StringToCell("D6", false), Is.EqualTo(new Cell(4, 6)));
             }
 
             [Test]
             public void StringToCell2()
             {
-                Assert.That(Graphics.StringToCell("G5"), Is.EqualTo(new Cell(7, 5)));
+                Assert.That(Graphics.StringToCell("G5", false), Is.EqualTo(new Cell(7, 5)));
             }
 
             [Test]
             public void StringToCell3()
             {
-                Assert.That(Graphics.StringToCell("cipsmgu"), Is.Null);
+                Assert.That(Graphics.StringToCell("cipsmgu", false), Is.Null);
+            }
+
+            [Test]
+            public void StringToCell4()
+            {
+                Assert.That(Graphics.StringToCell("B2", true), Is.EqualTo(new Cell(7, 7)));
             }
         }
 
@@ -147,6 +157,25 @@ namespace GraphicsTests
 
                 Assert.That(Graphics.BoardToString(board), Is.EqualTo(expected));
             }
+
+            [Test] 
+            public void BoardToString4()
+            {
+                Board board = new();
+                board.FillDefault();
+                board.Flip();
+                String expected =
+                    "1.w.w.w.w\n" +
+                    "2w.w.w.w.\n" +
+                    "3.w.w.w.w\n" +
+                    "4........\n" +
+                    "5........\n" +
+                    "6b.b.b.b.\n" +
+                    "7.b.b.b.b\n" +
+                    "8b.b.b.b.\n" +
+                    " HGFEDCBA";
+
+                Assert.That(Graphics.BoardToString(board), Is.EqualTo(expected));
+            }
         }
-    }
 }

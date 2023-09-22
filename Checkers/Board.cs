@@ -37,7 +37,9 @@ namespace Checkers
 
     public class Board
     {
-        internal static int size = 8;
+        internal bool Flipped = false;
+
+        internal static int Size = 8;
 
         internal Dictionary<Cell, Figure?> figures = new();
 
@@ -49,7 +51,7 @@ namespace Checkers
         internal static bool IsCell(Cell cell)
         {
             if (cell.X <= 0 || cell.Y <= 0) return false;
-            if (cell.X > Board.size || cell.Y > Board.size) return false;
+            if (cell.X > Board.Size || cell.Y > Board.Size) return false;
             return (cell.X + cell.Y) % 2 == 0;
         }
 
@@ -262,9 +264,9 @@ namespace Checkers
 
         internal void FillWithSame(Figure? figure)
         {
-            for (int i = 1; i <= size; ++i)
+            for (int i = 1; i <= Size; ++i)
             {
-                for (int j = 0; j < size / 2; ++j)
+                for (int j = 0; j < Size / 2; ++j)
                 {
                     Cell cell = new(i, 2 * j + (i + 1) % 2 + 1);
                     figures[cell] = figure;
@@ -274,9 +276,9 @@ namespace Checkers
 
         internal void FillDefault()
         {
-            for (int i = 1; i <= size; ++i)
+            for (int i = 1; i <= Size; ++i)
             {
-                for (int j = 0; j < size / 2; ++j)
+                for (int j = 0; j < Size / 2; ++j)
                 {
                     Cell cell = new(i, 2 * j + (i + 1) % 2 + 1);
                     if (cell.Y <= 3)
@@ -289,15 +291,17 @@ namespace Checkers
 
         internal void Flip()
         {
-            for (int i = 1; i <= size / 2; ++i)
+            for (int i = 1; i <= Size / 2; ++i)
             {
-                for (int j = 0; j < size / 2; ++j)
+                for (int j = 0; j < Size / 2; ++j)
                 {
                     Cell cell1 = new(i, 2 * j + (i + 1) % 2 + 1);
-                    Cell cell2 = new(size + 1 - cell1.X, size + 1 - cell1.Y);
+                    Cell cell2 = new(Size + 1 - cell1.X, Size + 1 - cell1.Y);
                     (figures[cell2], figures[cell1]) = (figures[cell1], figures[cell2]);
                 }
             }
+
+            Flipped = !Flipped;
         }
 
         private protected Cell? NearestFigureOnDiagonal(Cell start,

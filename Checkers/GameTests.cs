@@ -14,8 +14,10 @@ namespace GameTests
             Cell start = new(3, 5);
             Cell defender1 = new(4, 6);
             Cell defender2 = new(2, 6);
+            Cell defender3 = new(5, 7);
             game.board.FillCell(start, blackChecker);
             game.board.FillCell(defender1, whiteChecker);
+            game.board.FillCell(defender3 , blackChecker);
             Assert.That(game.PossibleMoveTurns(start), Is.EqualTo(new Cells() { defender2}));
         }
 
@@ -80,9 +82,10 @@ namespace GameTests
             Figure blackChecker = new(Color.Black, Type.Checker);
             Cell start = new(3, 5);
             Cell defender1 = new(5, 7);
-            Cell defender2 = new(2, 6);
+            Cell defender2 = new(6, 8);
             game.board.FillCell(start, whiteQueen);
             game.board.FillCell(defender1, blackChecker);
+            game.board.FillCell(defender2 , blackChecker);
             Cells expected = new()
             {
                 new(4, 6),
@@ -249,6 +252,7 @@ namespace GameTests
             game.board.FillCell(attacker, blackChecker);
             game.board.FillCell(defender, whiteChecker);
             game.MakeTurn(attacker, turn);
+            game.EndTurn();
             Assert.Multiple(() =>
             {
                 Assert.That(game.board.Occupant(attacker), Is.EqualTo(null));
@@ -270,6 +274,7 @@ namespace GameTests
             game.board.FillCell(attacker, blackQueen);
             game.board.FillCell(defender, whiteChecker);
             game.MakeTurn(attacker, turn);
+            game.EndTurn();
             Assert.Multiple(() =>
             {
                 Assert.That(game.board.Occupant(attacker), Is.EqualTo(null));
@@ -288,6 +293,7 @@ namespace GameTests
             Cell turn = new(6, 8);
             game.board.FillCell(attacker, blackQueen);
             game.MakeTurn(attacker, turn);
+            game.EndTurn();
             Assert.Multiple(() =>
             {
                 Assert.That(game.board.Occupant(attacker), Is.EqualTo(null));
@@ -305,6 +311,7 @@ namespace GameTests
             Cell turn = new(4, 6);
             game.board.FillCell(attacker, blackChecker);
             game.MakeTurn(attacker, turn);
+            game.EndTurn();
             Assert.Multiple(() =>
             {
                 Assert.That(game.board.Occupant(attacker), Is.EqualTo(null));
@@ -343,7 +350,6 @@ namespace GameTests
             game.board.FillCell(attacker, blackChecker);
             game.board.FillCell(defender, whiteChecker);
             game.MakeTurn(attacker, turn);
-            game.board.Flip();
             Assert.Multiple(() =>
             {
                 Assert.That(game.board.Occupant(attacker), Is.EqualTo(null));
