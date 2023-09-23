@@ -276,14 +276,16 @@ namespace Checkers
 
         internal void FillDefault()
         {
+            int threeFilledLanes = 3;
+
             for (int i = 1; i <= Size; ++i)
             {
                 for (int j = 0; j < Size / 2; ++j)
                 {
                     Cell cell = new(i, 2 * j + (i + 1) % 2 + 1);
-                    if (cell.Y <= 3)
+                    if (cell.Y <= threeFilledLanes)
                         figures[cell] = new Figure(Color.White, Type.Checker);
-                    if (cell.Y >= 6)
+                    if (cell.Y >= Size - threeFilledLanes + 1)
                         figures[cell] = new Figure(Color.Black, Type.Checker);
                 }
             }
