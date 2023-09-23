@@ -15,7 +15,8 @@
             }
 
             Console.Clear();
-            Console.WriteLine("Game Has Ended. Winner: ", game.Winner().Value);
+            Console.Write("Game Has Ended. Winner: ");
+            Console.WriteLine(game.Winner());
         }
 
         internal static void ProcessTurn(Game game)

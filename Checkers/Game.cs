@@ -140,7 +140,11 @@
                 board.ClearCell(defender);
                 board.ClearCell(begin);
                 if (TryPutQueen(end))
+                {
                     EndTurn();
+                    return;
+                }
+                    
                 if(PossibleTurns(end).Count == 0)
                     EndTurn();
                 return;
