@@ -15,6 +15,13 @@
             movedCell = null;
         }
 
+        public Game(Game game) 
+        {
+            board = new(game.board);
+            turn = game.turn;
+            movedCell = game.movedCell;
+        }
+
         internal Cells PossibleMoveTurns(Cell cell)
         {
             Figure? figure = board.Occupant(cell);
@@ -179,6 +186,14 @@
             return null;
         }
 
+        internal Color EnemyColor()
+        {
+            if (turn == Color.Black)
+                return Color.White;
+            else
+                return Color.Black;
+        }
+
         private protected Cells IsCorrectTurn(Cell attacker, Cell defender, Figure figure) 
         {
             if (board.Occupant(defender) == null)
@@ -215,14 +230,6 @@
             }
 
             return false;
-        }
-
-        private protected Color EnemyColor()
-        {
-            if (turn == Color.Black)
-                return Color.White;
-            else
-                return Color.Black;
         }
     }
 }

@@ -1,68 +1,60 @@
 ﻿namespace Checkers
-{ 
+{
     internal class GameManager
     {
+        internal enum ErrorMessage
+        {
+            None,
+            NullInput,
+            NotACell,
+            NoPossibleTurns,
+            ImpossibleTurn
+        }
+
+        internal static Dictionary<ErrorMessage, string> errorMessages = new()
+        {
+            {ErrorMessage.None, "" },
+            {ErrorMessage.NullInput, "Incorrect input: null input"},
+            {ErrorMessage.NotACell, "Incorrect input: not a cell"},
+            {ErrorMessage.NoPossibleTurns, "Incorrect input: no turns from this cell"},
+            {ErrorMessage.ImpossibleTurn, "Incorrect input: impossible turn" }
+        };
         internal static void StartGame()
         {
             Game game = new();
             game.Start();
 
-            Console.Clear();
+            PrintTopMessage(ErrorMessage.None);
 
             while (game.Winner() == null)
             {
                 ProcessTurn(game);
             }
 
-            Console.Clear();
-            Console.Write("Game Has Ended. Winner: ");
-            Console.WriteLine(game.Winner());
+            PrintWinner(game.Winner().Value);
         }
 
         internal static void ProcessTurn(Game game)
         {
             Cells possibleStarts = game.PossibleTurnStarts();
 
-            PrintTurn(game);
-            Console.WriteLine(Graphics.BoardToString(game.board, 
-                possibleStarts, null, BoardStyle.Fancy));
-            PrintLine();
+            PrintInfoStart(game, possibleStarts);
+            AskStartCell(possibleStarts, game);
 
-            
-            Console.WriteLine("Possible start cells:");
-            Console.WriteLine(Graphics.CellsToString(possibleStarts, game.board.Flipped));
-            Console.WriteLine("Enter cell");
-
-            Cell? start = ProcessCellInput(game);
-
+            Cell? start = ProcessTurnStartInput(game, possibleStarts);
             if (start == null)
                 return;
 
-            if (!possibleStarts.Contains(start.Value))
-            {
-                Console.Clear();
-                Console.WriteLine("Incorrect Input: no turns from this cell");
-                return;
-            }
-
             Cells possibleEnds = game.PossibleTurns(start.Value);
 
-            Console.Clear();
-            PrintTurn(game);
-            Console.WriteLine(Graphics.BoardToString(game.board,
-                possibleEnds, start, BoardStyle.Fancy));
-            Console.WriteLine("Possible turns:");
-            Console.WriteLine(Graphics.CellsToString(possibleEnds, game.board.Flipped));
-            Console.WriteLine("Enter turn destination");
+            PrintInfoEnd(game, possibleEnds, start.Value);
+            AskEndCell(possibleEnds, game); 
 
-            Cell? end = ProcessCellInput(game);
-
+            Cell? end = ProcessTurnEndInput(game, possibleEnds);
             if (end == null)
                 return;
 
-            ProcessTurnInput(start.Value, end.Value, game);
-
-            Console.Clear();
+            game.MakeTurn(start.Value, end.Value);
         }
 
         private protected static Cell? ProcessCellInput(Game game)
@@ -71,9 +63,7 @@
 
             if (input == null)
             {
-                Console.Clear();
-                Console.WriteLine("Incorrect input: null input");
-                PrintLine();
+                PrintTopMessage(ErrorMessage.NullInput);
                 return null;
             }
 
@@ -82,25 +72,46 @@
 
             if (!start.HasValue)
             {
-                Console.Clear();
-                Console.WriteLine("Incorrect input: not a cell");
-                PrintLine();
+                PrintTopMessage(ErrorMessage.NotACell);
                 return null;
             }
 
             return start.Value;
         }
 
-        private protected static void ProcessTurnInput(Cell start, Cell end, Game game)
+        private protected static Cell? ProcessTurnStartInput(Game game, Cells possibleStarts)
         {
-            if (!game.PossibleTurns(start).Contains(end))
+            Cell? start = ProcessCellInput(game);
+
+            if (start == null)
+                return null;
+
+            if (!possibleStarts.Contains(start.Value))
             {
-                Console.Clear();
-                Console.WriteLine("Incorrect input: inpossible turn");
-                PrintLine();
+                PrintTopMessage(ErrorMessage.NoPossibleTurns);
+                return null;
             }
 
-            game.MakeTurn(start, end);
+            PrintTopMessage(ErrorMessage.None);
+
+            return start;
+        }
+        private protected static Cell? ProcessTurnEndInput(Game game, Cells possibleEnds)
+        {
+            Cell? end = ProcessCellInput(game);
+
+            if (end == null)
+                return null;
+
+            if (!possibleEnds.Contains(end.Value))
+            {
+                PrintTopMessage(ErrorMessage.ImpossibleTurn);
+                return null;
+            }
+
+            PrintTopMessage(ErrorMessage.None);
+
+            return end;
         }
 
         private protected static void PrintTurn(Game game)
@@ -112,6 +123,55 @@
         private protected static void PrintLine()
         {
             Console.WriteLine("_________________________");
+        }
+
+        private protected static void PrintTopMessage(ErrorMessage msg) 
+        {
+            PrintTopMessage(errorMessages[msg]);
+        }
+
+        private protected static void PrintTopMessage(string message)
+        {
+            Console.Clear();
+            Console.WriteLine(message);
+            PrintLine();
+        }
+
+        private protected static void AskStartCell(Cells cells, Game game)
+        {
+            Console.WriteLine("Possible turn starts:");
+            Console.WriteLine(Graphics.CellsToString(cells, game.board.Flipped));
+            Console.WriteLine("Enter turn start");
+        }
+
+        private protected static void AskEndCell(Cells cells, Game game)
+        {
+            Console.WriteLine("Possible destinations");
+            Console.WriteLine(Graphics.CellsToString(cells, game.board.Flipped));
+            Console.WriteLine("Enter turn destination");
+        }
+
+        private protected static void PrintWinner(Color winner)
+        {
+            Console.Clear();
+            Console.Write("Game Has Ended. Winner: ");
+            Console.WriteLine(winner);
+        }
+
+        private protected static void PrintInfoStart(Game game, Cells possibleStarts) 
+        {
+            PrintTurn(game);
+            Console.WriteLine(Graphics.BoardToString(game.board,
+                possibleStarts, null, BoardStyle.Fancy));
+            PrintLine();
+        }
+
+        private protected static void PrintInfoEnd(Game game, Cells possibleEnds, Cell start)
+        {
+            PrintTurn(game);
+            Console.WriteLine(Graphics.BoardToString(game.board,
+                possibleEnds, start, BoardStyle.Fancy));
+            PrintLine();
         }
     }
 }

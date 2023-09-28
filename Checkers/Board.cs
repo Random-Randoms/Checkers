@@ -48,6 +48,13 @@ namespace Checkers
             FillWithNulls();
         }
 
+        public Board(Board board)
+        {
+            figures = board.figures.ToDictionary(entry => entry.Key,
+                                               entry => entry.Value);
+            Flipped = board.Flipped;
+        }
+
         internal static bool IsCell(Cell cell)
         {
             if (cell.X <= 0 || cell.Y <= 0) return false;
