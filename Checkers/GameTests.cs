@@ -350,6 +350,7 @@ namespace GameTests
             game.board.FillCell(attacker, blackChecker);
             game.board.FillCell(defender, whiteChecker);
             game.MakeTurn(attacker, turn);
+            game.board.Flip();
             Assert.Multiple(() =>
             {
                 Assert.That(game.board.Occupant(attacker), Is.EqualTo(null));

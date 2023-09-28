@@ -37,7 +37,7 @@ namespace Checkers
 
     public class Board
     {
-        internal bool Flipped = false;
+        private bool flipped = false;
 
         internal static int Size = 8;
 
@@ -52,7 +52,7 @@ namespace Checkers
         {
             figures = board.figures.ToDictionary(entry => entry.Key,
                                                entry => entry.Value);
-            Flipped = board.Flipped;
+            flipped = board.IsFlipped();
         }
 
         internal static bool IsCell(Cell cell)
@@ -60,6 +60,11 @@ namespace Checkers
             if (cell.X <= 0 || cell.Y <= 0) return false;
             if (cell.X > Board.Size || cell.Y > Board.Size) return false;
             return (cell.X + cell.Y) % 2 == 0;
+        }
+
+        internal bool IsFlipped()
+        {
+            return flipped;
         }
 
         internal Figure? Occupant(Cell cell)
@@ -310,7 +315,7 @@ namespace Checkers
                 }
             }
 
-            Flipped = !Flipped;
+            flipped = !flipped;
         }
 
         private protected Cell? NearestFigureOnDiagonal(Cell start,

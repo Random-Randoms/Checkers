@@ -68,7 +68,7 @@
             }
 
 
-            Cell? start = Graphics.StringToCell(input, game.board.Flipped);
+            Cell? start = Graphics.StringToCell(input, game.board.IsFlipped());
 
             if (!start.HasValue)
             {
@@ -140,14 +140,14 @@
         private protected static void AskStartCell(Cells cells, Game game)
         {
             Console.WriteLine("Possible turn starts:");
-            Console.WriteLine(Graphics.CellsToString(cells, game.board.Flipped));
+            Console.WriteLine(Graphics.CellsToString(cells, game.board.IsFlipped()));
             Console.WriteLine("Enter turn start");
         }
 
         private protected static void AskEndCell(Cells cells, Game game)
         {
             Console.WriteLine("Possible destinations");
-            Console.WriteLine(Graphics.CellsToString(cells, game.board.Flipped));
+            Console.WriteLine(Graphics.CellsToString(cells, game.board.IsFlipped()));
             Console.WriteLine("Enter turn destination");
         }
 

@@ -88,7 +88,7 @@
         {
             string result = "";
 
-            bool flipped = board.Flipped;
+            bool flipped = board.IsFlipped();
 
             for (int i = Board.Size; i >= 1; i--)
             {
