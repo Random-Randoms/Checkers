@@ -35,7 +35,7 @@ namespace Checkers
 {
     
 
-    public class Board
+    internal sealed class Board
     {
         private bool flipped = false;
 

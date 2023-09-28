@@ -1,6 +1,6 @@
 ﻿namespace Checkers
 {
-    internal class GameManager
+    internal sealed class GameManager
     {
         internal enum ErrorMessage
         {
@@ -130,7 +130,7 @@
             PrintTopMessage(errorMessages[msg]);
         }
 
-        private protected static void PrintTopMessage(string message)
+        private static void PrintTopMessage(string message)
         {
             Console.Clear();
             Console.WriteLine(message);
@@ -151,7 +151,7 @@
             Console.WriteLine("Enter turn destination");
         }
 
-        private protected static void PrintWinner(Color winner)
+        private static void PrintWinner(Color winner)
         {
             Console.Clear();
             Console.Write("Game Has Ended. Winner: ");

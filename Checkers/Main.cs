@@ -2,7 +2,7 @@
 
 namespace Checkers
 {
-    public static class Lol
+    public static class App
     {
         public static void Main(string[] args)
         {

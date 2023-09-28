@@ -1,6 +1,6 @@
 ﻿namespace Checkers
 {
-    internal class Game
+    internal sealed class Game
     {
         internal Board board;
 
