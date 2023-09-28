@@ -194,7 +194,7 @@
                 return Color.Black;
         }
 
-        private protected Cells IsCorrectTurn(Cell attacker, Cell defender, Figure figure) 
+        private Cells IsCorrectTurn(Cell attacker, Cell defender, Figure figure) 
         {
             if (board.Occupant(defender) == null)
                 return new();
@@ -213,7 +213,7 @@
             return new() {landingCell.Value};
         }
 
-        private protected bool TryPutQueen(Cell cell)
+        private bool TryPutQueen(Cell cell)
         {
             Figure? figure = board.Occupant(cell);
 

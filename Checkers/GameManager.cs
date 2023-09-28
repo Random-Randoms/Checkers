@@ -57,7 +57,7 @@
             game.MakeTurn(start.Value, end.Value);
         }
 
-        private protected static Cell? ProcessCellInput(Game game)
+        private static Cell? ProcessCellInput(Game game)
         {
             string? input = Console.ReadLine();
 
@@ -79,7 +79,7 @@
             return start.Value;
         }
 
-        private protected static Cell? ProcessTurnStartInput(Game game, Cells possibleStarts)
+        private static Cell? ProcessTurnStartInput(Game game, Cells possibleStarts)
         {
             Cell? start = ProcessCellInput(game);
 
@@ -96,7 +96,7 @@
 
             return start;
         }
-        private protected static Cell? ProcessTurnEndInput(Game game, Cells possibleEnds)
+        private static Cell? ProcessTurnEndInput(Game game, Cells possibleEnds)
         {
             Cell? end = ProcessCellInput(game);
 
@@ -114,18 +114,18 @@
             return end;
         }
 
-        private protected static void PrintTurn(Game game)
+        private static void PrintTurn(Game game)
         {
             Console.WriteLine("Current turn: " + game.turn);
             PrintLine();
         }
 
-        private protected static void PrintLine()
+        private static void PrintLine()
         {
             Console.WriteLine("_________________________");
         }
 
-        private protected static void PrintTopMessage(ErrorMessage msg) 
+        private static void PrintTopMessage(ErrorMessage msg) 
         {
             PrintTopMessage(errorMessages[msg]);
         }
@@ -137,14 +137,14 @@
             PrintLine();
         }
 
-        private protected static void AskStartCell(Cells cells, Game game)
+        private static void AskStartCell(Cells cells, Game game)
         {
             Console.WriteLine("Possible turn starts:");
             Console.WriteLine(Graphics.CellsToString(cells, game.board.IsFlipped()));
             Console.WriteLine("Enter turn start");
         }
 
-        private protected static void AskEndCell(Cells cells, Game game)
+        private static void AskEndCell(Cells cells, Game game)
         {
             Console.WriteLine("Possible destinations");
             Console.WriteLine(Graphics.CellsToString(cells, game.board.IsFlipped()));
@@ -158,7 +158,7 @@
             Console.WriteLine(winner);
         }
 
-        private protected static void PrintInfoStart(Game game, Cells possibleStarts) 
+        private static void PrintInfoStart(Game game, Cells possibleStarts) 
         {
             PrintTurn(game);
             Console.WriteLine(Graphics.BoardToString(game.board,
@@ -166,7 +166,7 @@
             PrintLine();
         }
 
-        private protected static void PrintInfoEnd(Game game, Cells possibleEnds, Cell start)
+        private static void PrintInfoEnd(Game game, Cells possibleEnds, Cell start)
         {
             PrintTurn(game);
             Console.WriteLine(Graphics.BoardToString(game.board,

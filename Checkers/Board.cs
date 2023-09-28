@@ -318,7 +318,7 @@ namespace Checkers
             flipped = !flipped;
         }
 
-        private protected Cell? NearestFigureOnDiagonal(Cell start,
+        private Cell? NearestFigureOnDiagonal(Cell start,
             int deltaX, int deltaY)
         {
             if (!IsCell(start))
@@ -336,7 +336,7 @@ namespace Checkers
             return null;
         }
 
-        private protected Cells DiagonalUntilFigure(Cell cell, int deltaX, int deltaY)
+        private Cells DiagonalUntilFigure(Cell cell, int deltaX, int deltaY)
         {
             Cells result = new();
             
