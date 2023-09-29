@@ -1,5 +1,13 @@
 ﻿namespace Checkers
 {
+    /*
+     * Represents current state of a game
+     * Contains current board, current turn, cell that has been
+     * moved if player is currrently making a coplex turn
+     * Provides possible moves information, winner of a game, current
+     * board
+     * Implements making turns
+     */
     internal sealed class Game
     {
         internal Board board;
@@ -170,11 +178,6 @@
         internal void Start()
         {
             board.FillDefault();
-        }
-
-        internal bool IsVictory()
-        {
-            return board.FiguresOfColor(EnemyColor()).Count == 0;
         }
 
         internal Color? Winner()

@@ -5,6 +5,10 @@
         Default,
         Fancy
     }
+
+    /*
+     * Implements graphics representation of a game
+     */
     internal static class Graphics
     {
         internal static Cell? StringToCell(string str, bool flipped)

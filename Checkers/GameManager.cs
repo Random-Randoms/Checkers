@@ -1,5 +1,8 @@
 ﻿namespace Checkers
 {
+    /*
+     * Implements text output, handling text input, game control
+     */
     internal sealed class GameManager
     {
         internal enum ErrorMessage

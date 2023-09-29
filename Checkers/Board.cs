@@ -1,20 +1,33 @@
 global using NUnit.Framework;
 global using Cells = System.Collections.Generic.List<Cell>;
 
+/*
+ * Represents color of a figure or a player
+ */
 internal enum Color
 {
     Black,
     White
 }
 
+/*
+ * Represents type of a figure: Queen or a Checker
+ */
 internal enum Type
 {
     Checker,
     Queen
 }
 
+/*
+ * Represents single checker (or queen)
+ */
 internal record Figure(Color Color, Type Type);
 
+
+/*
+ * Represents a single board cell
+ */
 internal struct Cell
 { 
     public Cell(int x, int y)
@@ -34,7 +47,11 @@ internal struct Cell
 namespace Checkers
 {
     
-
+    /*
+     * Contiains 32 possible cells of checkers board
+     * and figures staying in each cell. Methods provides geometrical
+     * information about board and figures
+     */
     internal sealed class Board
     {
         private bool flipped = false;
