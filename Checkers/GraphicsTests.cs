@@ -29,6 +29,16 @@ namespace GraphicsTests
             }
         }
 
+    public class CellsToString
+    {
+        [Test]
+        public void CellsToString1()
+        {
+            Assert.That(Graphics.CellsToString(new() { new Cell(1, 1), new Cell(2, 2)}, false),
+                Is.EqualTo("A1 B2"));
+        }
+    }
+
         public class StringToCell
         {
             [Test]
